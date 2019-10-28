@@ -42,6 +42,13 @@ void matriceCopy(const int *A, const int N, int *Copy, const int iIniCpy, const 
     return;
 }
 
+void matrixSwap(int *A, const int N, const int iA, const int jA, const int iB, const int jB){
+    int aux = *(A + N*iA + jA);
+    *(A + N*iA + jA) = *(A + N*iB + jB);
+    *(A + N*iB + jB) = aux;
+    return;
+}
+
 void singlyEvenMatrixPermutator(int *A, const int N, const int iniTerm){
     int i = 0, j = N/2, k, endTerm = N*N + iniTerm;
     for(k = iniTerm; k <= endTerm; k++){
@@ -79,6 +86,24 @@ void singlyEvenMatrixAuxiliar(int *A, const int N){
     return;
 }
 
+void singlyEvenMatrixColumnPermutator(int *A, const int N){
+    int i, j, leftLim = (N - 2)/4, rightLim, half = N/2, quarter = N/4, count;
+    rightLim = leftLim - 1;
+    for(i = 0; i < half; i++)
+        for(j = 0; j < leftLim; j++){
+            if(i == quarter)
+                matrixSwap(A, N, i, j + 1, i + half, j + 1);
+            else
+                matrixSwap(A, N, i, j, i + half, j);
+        }
+    for(i = 0; i < half; i++){
+        count = 0;
+        for(j = N - leftLim + 1; count < rightLim; j++, count++)
+            matrixSwap(A, N, i, j, i + half, j);
+    }
+    return;
+}
+
 void oddMagicMatrixConstructor(int *A, const int N){
     int i = 0, j = N/2, k, endTerm = N*N;
     for(k = 1; k <= endTerm; k++){
@@ -105,7 +130,7 @@ void matrixFill(int *A, const int N){
 void singlyEvenMagicMatrixConstructor(int *A, const int N){
     int i, j, half = N/4 + 1;
     singlyEvenMatrixAuxiliar(A, N);
-    //singlyEvenMatrixColumnPermutator();
+    singlyEvenMatrixColumnPermutator(A, N);
     return;
 }
 
@@ -148,6 +173,7 @@ boolean continua(void){
         return(0);
 }
 
+
 int main(void){
     char numInput[2], ch;
     int N;
@@ -164,7 +190,7 @@ int main(void){
         else
             singlyEvenMagicMatrixConstructor(A, N);
         system("cls");
-        matrixPrint(A, N);
+            matrixPrint(A, N);
         system("Pause");
     }while(continua());
     return(0);
