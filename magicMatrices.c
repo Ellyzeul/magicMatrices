@@ -1,6 +1,28 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+typedef enum Boolean {f, v} boolean;
+
+boolean charToInt(const char *String, int *num){
+    int i;
+    *num = 0;
+    for(i = 0; *(String + i) != '\0'; i++){
+        if(*(String + i) < 48 || *(String + i) > 57)
+            return(0);
+        *num *= 10;
+        *num += *(String + i) - 48;
+    }return(1);
+}
+
+void numValidate(const char *String, int *var, const char *msg){
+    do{
+        system("cls");
+        puts(msg);
+        gets(String);
+    }while(!charToInt(String, var));
+    return;
+}
+
 void matrixPrint(const int *A, const int N){
     int i, j;
     for(i = 0; i < N; i++){
@@ -61,9 +83,18 @@ void fourMultipleMagicMatrixConstructor(int *A, const int N){
 
 
 int main(void){
-    int A[4][4];
-    fourMultipleMagicMatrixConstructor(A, 4);
-    matrixPrint(A, 4);
+    char numInput[2];
+    int N;
+    do{
+        numValidate(numInput, &N, "Escolha a ordem da matriz a ser gerada (no intervalo de 3 a 10 apenas)");
+    }while(N < 3 || N > 10);
+    int A[N][N];
+    if(N % 2 != 0)
+        oddMagicMatrixConstructor(A, N);
+    else if(N % 4 == 0)
+        fourMultipleMagicMatrixConstructor(A, N);
+    system("cls");
+    matrixPrint(A, N);
     system("Pause");
     return(0);
 }
